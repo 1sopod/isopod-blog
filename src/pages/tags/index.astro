@@ -1,0 +1,14 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getTags } from '../../utils';
+
+const tags = await getTags();
+---
+<Layout pageTitle="Tags" description="Browse posts and writeups by topic.">
+    <h2>Tags</h2>
+    <ul class="tag-list tag-list--big">
+        {tags.map((t) => (
+            <li><a class="tag" href={`/tags/${t.slug}/`}>#{t.name} <span class="muted">({t.count})</span></a></li>
+        ))}
+    </ul>
+</Layout>

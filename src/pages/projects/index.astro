@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Mascot from '../../components/Mascot.astro';
+import Card from '../../components/Card.astro';
+import { MASCOTS } from '../../consts';
+import { getProjects } from '../../utils';
+
+const projects = await getProjects();
+---
+<Layout pageTitle="Projects" description="Things I've built.">
+    <Mascot src={MASCOTS.projects} />
+    <h2>Projects</h2>
+    <ul role="list" class="link-card-grid">
+        {projects.map((card) => <Card
+            url={`/projects/${card.id}/`}
+            image={card.data.image?.url}
+            title={card.data.title}
+            body={card.data.description}
+        />)}
+    </ul>
+</Layout>

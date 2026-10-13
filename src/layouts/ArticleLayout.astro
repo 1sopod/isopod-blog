@@ -1,0 +1,60 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './Layout.astro';
+import Mascot from '../components/Mascot.astro';
+import TagList from '../components/TagList.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { MASCOTS, SITE } from '../consts';
+import { articleUrl, formatDate, readingTime, type Article } from '../utils';
+
+interface Props {
+    entry: Article;
+    headings: MarkdownHeading[];
+    prev?: Article;
+    next?: Article;
+}
+
+const { entry, headings, prev, next } = Astro.props;
+const { data } = entry;
+const isWriteup = entry.collection === 'writeups';
+---
+<BaseLayout pageTitle={data.title} description={data.description} image={data.image?.url} type="article">
+    <Mascot src={isWriteup ? MASCOTS.writeups : MASCOTS.posts} />
+    <article data-pagefind-body>
+        <h2 class="article-heading" data-pagefind-meta="title">{data.title}</h2>
+        <ul class="badge__list">
+            <li><span class="badge badge--item">AUTHOR</span>{SITE.author}</li>
+            <li>
+                <span class="badge badge--item">PUBLISHED</span>
+                <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+                <span class="muted"> · {readingTime(entry.body)}</span>
+            </li>
+            {data.updatedDate && (
+                <li><span class="badge badge--item">UPDATED</span>{formatDate(data.updatedDate)}</li>
+            )}
+            {isWriteup && (
+                <>
+                    <li><span class="badge badge--item">PLATFORM</span>{data.platform} · {data.category}</li>
+                    {data.os && <li><span class="badge badge--item">OS</span>{data.os}</li>}
+                    <li>
+                        <span class="badge badge--item">DIFFICULTY</span>
+                        <span class={`diff-text diff--${data.difficulty.toLowerCase().replace(' ', '-')}`}>{data.difficulty}</span>
+                    </li>
+                </>
+            )}
+        </ul>
+        <TagList tags={data.tags} />
+        {data.image && (
+            <div class="center"><img class="pro-img" src={data.image.url} alt={data.image.alt} width="500" height="281" /></div>
+        )}
+        <TableOfContents headings={headings} />
+        <div class="prose">
+            <slot />
+        </div>
+    </article>
+
+    <nav class="post-nav" aria-label="More articles">
+        {next ? <a href={articleUrl(next)}><small>&larr; Newer</small><span>{next.data.title}</span></a> : <span />}
+        {prev ? <a class="post-nav--right" href={articleUrl(prev)}><small>Older &rarr;</small><span>{prev.data.title}</span></a> : <span />}
+    </nav>
+</BaseLayout>

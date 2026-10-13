@@ -1,0 +1,10 @@
+---
+interface Props {
+    src: string;
+}
+
+const { src } = Astro.props;
+---
+<div class="gif">
+    <img src={src} role="presentation" alt="" width="300" height="259" decoding="async">
+</div>

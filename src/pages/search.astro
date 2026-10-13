@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout pageTitle="Search" description="Search posts, writeups and projects.">
+    <h2>Search</h2>
+    <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+    <div id="search"></div>
+    {import.meta.env.DEV && (
+        <p class="muted no-indent">Search indexes the built site. Run <code>npm run build &amp;&amp; npm run preview</code> to try it.</p>
+    )}
+    <script is:inline src="/pagefind/pagefind-ui.js"></script>
+    <script is:inline>
+        window.addEventListener("DOMContentLoaded", () => {
+            if (!window.PagefindUI) return;
+            new PagefindUI({ element: "#search", showSubResults: true, showImages: false, autofocus: true });
+        });
+    </script>
+</Layout>

@@ -1,15 +1,26 @@
 ---
 import ThemeIcon from './ThemeIcon.astro';
+import { SITE } from '../consts';
+
+const links = [
+    { href: '/projects/', label: 'Projects' },
+    { href: '/posts/', label: 'Posts' },
+    { href: '/writeups/', label: 'Writeups' },
+    { href: '/tags/', label: 'Tags' },
+];
+const path = Astro.url.pathname;
 ---
 <div class="navbar">
     <div class="navbar__title">
-        <a href="/">Milky-Way</a>
+        <a href="/">{SITE.title}</a>
     </div>
     <div class="navbar__menu">
-        <a href="/works/">Works</a>
-        <a href="/posts/">Posts</a>
-        <a href="https://github.com/ttomczak3/Milky-Way" target="_blank">GitHub</a>
+        {links.map(({ href, label }) => (
+            <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
+        ))}
+        <a href="/search/" title="Search" aria-label="Search" aria-current={path.startsWith('/search') ? 'page' : undefined}>
+            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </a>
         <ThemeIcon />
     </div>
 </div>
-

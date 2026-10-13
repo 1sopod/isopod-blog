@@ -1,17 +1,16 @@
 ---
-const description = "404";
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+import { MASCOTS } from '../consts';
 ---
-<layout>
+<Layout pageTitle="404" description="Page not found.">
     <div class="lost">
         <div class="gif">
-            <img src="/.netlify/images?url=/images/404.webp" role="presentation" width="300" height="259" decoding="async">
+            <img src={MASCOTS.notFound} role="presentation" alt="" width="300" height="259" decoding="async">
         </div>
-        <h1 class="lost__header">{ description }</h1>
-        <p class="lost__body">It seems like you've wandered into the wrong forest!</p>
-        <p>
+        <h1 class="lost__header">404</h1>
+        <p class="lost__body no-indent">It seems like you've wandered into the wrong forest!</p>
+        <p class="no-indent">
             <a class="lost__link" href="/">Return Home</a>
         </p>
     </div>
-</layout>
-
+</Layout>

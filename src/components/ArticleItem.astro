@@ -1,0 +1,33 @@
+---
+import type { Article } from '../utils';
+import { articleUrl, formatDate, readingTime } from '../utils';
+import TagList from './TagList.astro';
+
+interface Props {
+    entry: Article;
+    // Show a "Writeup"/"Post" label (used on mixed lists like tag pages)
+    showKind?: boolean;
+}
+
+const { entry, showKind = false } = Astro.props;
+const { data } = entry;
+const isWriteup = entry.collection === 'writeups';
+---
+<li class="article">
+    <a class="article__title" href={articleUrl(entry)}>{data.title}</a>
+    <div class="article__meta">
+        <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+        <span>· {readingTime(entry.body)}</span>
+        {showKind && <span class="badge badge--item">{isWriteup ? 'WRITEUP' : 'POST'}</span>}
+        {isWriteup && (
+            <>
+                <span class={`badge badge--item diff diff--${data.difficulty.toLowerCase().replace(' ', '-')}`}>{data.difficulty}</span>
+                {data.os && <span class="badge badge--item">{data.os}</span>}
+            </>
+        )}
+        {data.draft && <span class="badge badge--item badge--warn">DRAFT</span>}
+        {isWriteup && !data.retired && <span class="badge badge--item badge--warn">ACTIVE (hidden in build)</span>}
+    </div>
+    <p class="article__desc">{data.description}</p>
+    <TagList tags={data.tags} />
+</li>

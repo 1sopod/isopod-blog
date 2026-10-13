@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArticleItem from '../../components/ArticleItem.astro';
+import { getArticles, getTags, slugifyTag } from '../../utils';
+
+export async function getStaticPaths() {
+    const articles = await getArticles();
+    return (await getTags()).map((tag) => ({
+        params: { tag: tag.slug },
+        props: {
+            name: tag.name,
+            entries: articles.filter((a) => a.data.tags.some((t) => slugifyTag(t) === tag.slug)),
+        },
+    }));
+}
+
+const { name, entries } = Astro.props;
+---
+<Layout pageTitle={`#${name}`} description={`Posts and writeups tagged ${name}.`}>
+    <h2>#{name}</h2>
+    <p class="muted no-indent">{entries.length} article{entries.length === 1 ? '' : 's'} &middot; <a class="footer__link" href="/tags/">all tags</a></p>
+    <ul role="list" class="article-list">
+        {entries.map((entry) => <ArticleItem entry={entry} showKind />)}
+    </ul>
+</Layout>

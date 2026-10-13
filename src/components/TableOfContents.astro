@@ -1,0 +1,19 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+    headings: MarkdownHeading[];
+}
+
+const headings = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{headings.length > 2 && (
+    <details class="toc" open>
+        <summary>Table of contents</summary>
+        <ol>
+            {headings.map((h) => (
+                <li class={`toc__item toc__item--${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>
+            ))}
+        </ol>
+    </details>
+)}

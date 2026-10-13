@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './Layout.astro';
+import Mascot from '../components/Mascot.astro';
+import TagList from '../components/TagList.astro';
+import { MASCOTS } from '../consts';
+
+interface Props {
+    entry: CollectionEntry<'projects'>;
+}
+
+const { data } = Astro.props.entry;
+---
+<BaseLayout pageTitle={data.title} description={data.description} image={data.image?.url}>
+    <Mascot src={MASCOTS.projects} />
+    <article data-pagefind-body>
+        <h2 data-pagefind-meta="title">{data.title}</h2>
+        <div class="prose">
+            <slot />
+        </div>
+        <ul class="badge__list">
+            {data.platform && <li><span class="badge badge--item">PLATFORM</span>{data.platform}</li>}
+            {data.stack.length > 0 && <li><span class="badge badge--item">STACK</span>{data.stack.join(', ')}</li>}
+            {data.website && <li><span class="badge badge--item">WEBSITE</span><a class="badge__link" href={data.website} target="_blank" rel="noopener">{data.website}</a></li>}
+            {data.github && <li><span class="badge badge--item">GITHUB</span><a class="badge__link" href={data.github} target="_blank" rel="noopener">{data.github}</a></li>}
+        </ul>
+        <TagList tags={data.tags} />
+        {data.screenshots.length > 0 && (
+            <div class="center">
+                {data.screenshots.map((s) => (
+                    <img class="pro-img" width="500" height="281" src={s.url} alt={s.alt} loading="lazy" decoding="async" />
+                ))}
+            </div>
+        )}
+    </article>
+</BaseLayout>

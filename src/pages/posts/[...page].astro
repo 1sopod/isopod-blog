@@ -1,0 +1,24 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import Mascot from '../../components/Mascot.astro';
+import ArticleItem from '../../components/ArticleItem.astro';
+import Pagination from '../../components/Pagination.astro';
+import { MASCOTS, SITE } from '../../consts';
+import { getPosts } from '../../utils';
+
+export const getStaticPaths = (async ({ paginate }) => {
+    return paginate(await getPosts(), { pageSize: SITE.postsPerPage });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+<Layout pageTitle="Posts" description="Articles on security and software engineering.">
+    <Mascot src={MASCOTS.posts} />
+    <h2>Blog</h2>
+    <ul role="list" class="article-list">
+        {page.data.map((entry) => <ArticleItem entry={entry} />)}
+    </ul>
+    {page.total === 0 && <p>Nothing here yet.</p>}
+    <Pagination page={page} />
+</Layout>
