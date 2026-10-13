@@ -10,9 +10,6 @@ retired: true
 tags: ['dockerlabs', 'linux', 'web', 'drupal', 'metasploit', 'sudo', 'privesc']
 ---
 
-> Ejotapete is a machine from **DockerLabs**, not HackTheBox. It lives in my HTB notes
-> folder for convenience, but the platform is DockerLabs.
-
 ## Overview
 
 A short, linear box: identify the CMS, exploit a well-known Drupal RCE for a foothold,
